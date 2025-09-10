@@ -1,5 +1,4 @@
 package com.example.registrojugadores.presentation.jugador
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
