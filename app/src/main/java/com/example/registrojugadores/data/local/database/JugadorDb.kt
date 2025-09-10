@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.registrojugadores.data.local.dao.JugadorDao
 import com.example.registrojugadores.data.local.entity.JugadorEntity
 
+
 @Database(
     entities = [JugadorEntity::class],
     version = 1,
