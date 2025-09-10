@@ -41,6 +41,7 @@ fun JugadoresNavHost(
             )
         }
 
+
         composable("jugador/{jugadorId}") { backStackEntry ->
             val jugadorId = backStackEntry.arguments?.getString("jugadorId")?.toIntOrNull()
             val jugador = if (jugadorId != null && jugadorId != -1) {
