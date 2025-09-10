@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.RegistroJugadores" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.RegistroJugadoresOF" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
