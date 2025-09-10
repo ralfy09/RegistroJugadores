@@ -1,5 +1,4 @@
 package com.example.registrojugadores
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +25,6 @@ class MainActivity : ComponentActivity() {
             .build()
 
         val jugadorRepository = JugadorRepository(database.jugadorDao())
-
         val jugadorViewModel = JugadorViewModel(jugadorRepository)
 
         setContent {
