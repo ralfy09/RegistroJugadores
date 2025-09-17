@@ -78,7 +78,11 @@ fun PartidaScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Brush.verticalGradient(listOf(Color(0xFF0D47A1), Color(0xFF0D47A1))))
+                    .background(
+                        brush = Brush.verticalGradient(
+                            listOf(Color(0xFFE0F2F1), Color(0xFF004D40)) // 🌟 Fondo igual que Dashboard
+                        )
+                    )
                     .padding(padding)
                     .padding(20.dp),
                 contentAlignment = Alignment.TopCenter
