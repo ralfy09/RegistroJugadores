@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.registrojugadores.data.local.entity.JugadorEntity
 import com.example.registrojugadores.data.repository.JugadorRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class JugadorViewModel(
+@HiltViewModel
+class JugadorViewModel @Inject constructor(
     private val jugadoresRepository: JugadorRepository
 ) : ViewModel() {
 
