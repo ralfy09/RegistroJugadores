@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.registrojugadores.data.local.dao.JugadorDao
 import com.example.registrojugadores.data.local.dao.PartidaDao
-import com.example.registrojugadores.data.local.database.AppDatabase
+import com.example.registrojugadores.data.local.database.JugadorDb
 import com.example.registrojugadores.data.repository.JugadorRepository
 import dagger.Module
 import dagger.Provides
@@ -19,18 +19,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "jugador.db")
+    fun provideDatabase(@ApplicationContext context: Context): JugadorDb =
+        Room.databaseBuilder(context,JugadorDb::class.java, "jugador.db")
             .fallbackToDestructiveMigration()
             .build()
 
     @Provides
     @Singleton
-    fun provideJugadorDao(db: AppDatabase): JugadorDao = db.jugadorDao()
+    fun provideJugadorDao(db: JugadorDb): JugadorDao = db.jugadorDao()
 
     @Provides
     @Singleton
-    fun providePartidaDao(db: AppDatabase): PartidaDao = db.PartidaDao()
+    fun providePartidaDao(db: JugadorDb): PartidaDao = db.PartidaDao()
 
     @Provides
     @Singleton
