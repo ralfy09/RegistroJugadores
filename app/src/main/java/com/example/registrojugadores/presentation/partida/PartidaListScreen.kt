@@ -54,7 +54,7 @@ fun PartidaListScreen(
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        listOf(Color(0xFFE0F2F1), Color(0xFF004D40)) // 🌟 Fondo igual que Dashboard
+                        listOf(Color(0xFFE0F2F1), Color(0xFF004D40))
                     )
                 )
                 .padding(paddingValues)

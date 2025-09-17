@@ -55,11 +55,6 @@ fun EditPartidaScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Editar Partida") },
-                navigationIcon = {
-                    IconButton(onClick = onCancel) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                    }
-                }
             )
         }
     ) { padding ->
@@ -112,12 +107,12 @@ fun EditPartidaScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp) // separación uniforme
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Button(
                     onClick = onCancel,
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                    modifier = Modifier.weight(1f) // mismo ancho
+                    modifier = Modifier.weight(1f)
                 ) {
                     Icon(Icons.Default.Close, contentDescription = "Cancelar", tint = Color.White)
                     Spacer(modifier = Modifier.width(4.dp))

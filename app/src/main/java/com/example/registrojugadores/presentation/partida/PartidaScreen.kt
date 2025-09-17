@@ -71,7 +71,7 @@ fun PartidaScreen(
             topBar = {
                 TopAppBar(
                     title = { Text("Crear Partida", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
-                    navigationIcon = { IconButton(onClick = onCancel) { Icon(Icons.Default.ArrowBack, contentDescription = "Volver") } }
+
                 )
             }
         ) { padding ->
@@ -80,7 +80,7 @@ fun PartidaScreen(
                     .fillMaxSize()
                     .background(
                         brush = Brush.verticalGradient(
-                            listOf(Color(0xFFE0F2F1), Color(0xFF004D40)) // 🌟 Fondo igual que Dashboard
+                            listOf(Color(0xFFE0F2F1), Color(0xFF004D40))
                         )
                     )
                     .padding(padding)
