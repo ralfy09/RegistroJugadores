@@ -15,7 +15,7 @@ import com.example.registrojugadores.data.local.entity.PartidaEntity
     exportSchema = false
 )
 @TypeConverters(RoomConverters::class)
-abstract class AppDatabase: RoomDatabase() {
+abstract class JugadorDb: RoomDatabase() {
     abstract fun jugadorDao(): JugadorDao
 
     abstract fun PartidaDao (): PartidaDao
