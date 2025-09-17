@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -57,7 +58,7 @@ fun DashboardScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Gestión de Jugadores",
+                    text = "Gestión",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF00796B),
@@ -67,8 +68,9 @@ fun DashboardScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(28.dp))
 
+                // Botón Jugadores
                 Button(
-                    onClick = { navController.navigate("JugadorList") },
+                    onClick = { navController.navigate("jugadorList") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp),
@@ -86,6 +88,33 @@ fun DashboardScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Jugadores",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón Partidas
+                Button(
+                    onClick = { navController.navigate("partidaList") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF009688),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.List,
+                        contentDescription = "Icono Partidas",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Partidas",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
