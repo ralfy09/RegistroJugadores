@@ -2,6 +2,7 @@ package com.example.registrojugadores.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,11 +10,16 @@ import com.example.registrojugadores.presentation.DashboardScreen
 import com.example.registrojugadores.presentation.jugador.JugadorListScreen
 import com.example.registrojugadores.presentation.jugador.JugadorScreen
 import com.example.registrojugadores.presentation.jugador.JugadorViewModel
+import com.example.registrojugadores.presentation.partida.EditPartidaScreen
+import com.example.registrojugadores.presentation.partida.PartidaListScreen
+import com.example.registrojugadores.presentation.partida.PartidaScreen
+import com.example.registrojugadores.presentation.partida.PartidaViewModel
 
 @Composable
 fun JugadoresNavHost(
     navHostController: NavHostController,
-    jugadorViewModel: JugadorViewModel
+    jugadorViewModel: JugadorViewModel,
+    partidaViewModel: PartidaViewModel
 ) {
     NavHost(
         navController = navHostController,
@@ -63,5 +69,51 @@ fun JugadoresNavHost(
                 onCancel = { navHostController.popBackStack() }
             )
         }
+
+        composable("partidaList") {
+            val partidaViewModel: PartidaViewModel = hiltViewModel()
+            val jugadorViewModel: JugadorViewModel = hiltViewModel()
+
+            PartidaListScreen(
+                partidaViewModel = partidaViewModel,
+                jugadorViewModel = jugadorViewModel,
+                onEdit = { partida ->
+                    navHostController.navigate("partida/edit/${partida.partidaId}")
+                },
+                onCreate = {
+                    navHostController.navigate("partida/null")
+                }
+            )
+        }
+
+        composable("partida/edit/{partidaId}") { backStackEntry ->
+            val partidaIdArg = backStackEntry.arguments?.getString("partidaId")
+            val partidaId = partidaIdArg?.toIntOrNull() ?: 0
+            val partidaViewModel: PartidaViewModel = hiltViewModel()
+            val jugadorViewModel: JugadorViewModel = hiltViewModel()
+
+            EditPartidaScreen(
+                navController = navHostController,
+                partidaId = partidaId,
+                partidaViewModel = partidaViewModel,
+                jugadorViewModel = jugadorViewModel,
+                onCancel = { navHostController.popBackStack() }
+            )
+        }
+
+        composable("partida/{partidaId}") { backStackEntry ->
+            val partidaIdArg = backStackEntry.arguments?.getString("partidaId")
+            val partidaId = partidaIdArg?.toIntOrNull()
+            val partidaViewModel: PartidaViewModel = hiltViewModel()
+            val jugadorViewModel: JugadorViewModel = hiltViewModel()
+
+            PartidaScreen(
+                navController = navHostController,
+                partidaId = partidaId,
+                partidaViewModel = partidaViewModel,
+                jugadorViewModel = jugadorViewModel,
+                onCancel = { navHostController.popBackStack() }
+            )
+        }
     }
-}
+    }
