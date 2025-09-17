@@ -2,14 +2,7 @@ package com.example.registrojugadores.presentation.partida
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,24 +10,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -91,7 +68,7 @@ fun EditPartidaScreen(
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF0D47A1), Color(0xFF0D47A1))
+                        listOf(Color(0xFFE0F2F1), Color(0xFF004D40))
                     )
                 )
                 .padding(padding)
@@ -124,9 +101,8 @@ fun EditPartidaScreen(
                     },
                 readOnly = true
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = esFinalizada,
                     onCheckedChange = { esFinalizada = it }
@@ -136,12 +112,12 @@ fun EditPartidaScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(16.dp) // separación uniforme
             ) {
                 Button(
                     onClick = onCancel,
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier.weight(1f) // mismo ancho
                 ) {
                     Icon(Icons.Default.Close, contentDescription = "Cancelar", tint = Color.White)
                     Spacer(modifier = Modifier.width(4.dp))
@@ -151,7 +127,6 @@ fun EditPartidaScreen(
                 Button(
                     onClick = {
                         if (jugador1 != null && jugador2 != null && partida != null) {
-
                             partidaViewModel.savePartida(
                                 fecha = partida!!.fecha,
                                 jugador1Id = jugador1!!.jugadorId!!,
@@ -164,13 +139,14 @@ fun EditPartidaScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                    modifier = Modifier.weight(1f) // mismo ancho
                 ) {
                     Icon(Icons.Default.Check, contentDescription = "Guardar", tint = Color.White)
                     Spacer(modifier = Modifier.width(4.dp))
                     Text("Guardar Cambios")
                 }
             }
+
         }
     }
 
