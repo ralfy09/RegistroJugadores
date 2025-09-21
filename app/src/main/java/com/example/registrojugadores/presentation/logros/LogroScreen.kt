@@ -1,133 +1,226 @@
-package com.example.registrojugadores.presentation.logro
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.registrojugadores.data.local.entity.JugadorEntity
 import com.example.registrojugadores.data.local.entity.LogroEntity
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 
 @Composable
 fun LogroScreen(
     logro: LogroEntity?,
-    agregarLogro: (Int, String, Int?) -> Unit,
+    jugadores: List<JugadorEntity>,
+    agregarLogro: (Int, String, Int?, Date) -> Unit,
     onCancel: () -> Unit
 ) {
-    var jugadorId by remember { mutableStateOf(logro?.jugadorId?.toString() ?: "") }
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    var jugadorSeleccionado by remember {
+        mutableStateOf(jugadores.find { it.jugadorId == logro?.jugadorId }?.nombres ?: "")
+    }
     var descripcion by remember { mutableStateOf(logro?.descripcion ?: "") }
     var partidaId by remember { mutableStateOf(logro?.partidaId?.toString() ?: "") }
+    var fecha by remember { mutableStateOf(logro?.fecha?.let { dateFormat.format(it) } ?: "") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    var showDropdown by remember { mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFFE3F2FD), Color(0xFF1565C0))
-                )
-            )
             .padding(16.dp)
     ) {
-        Card(
-            elevation = CardDefaults.cardElevation(4.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = if (logro == null) "Registrar Logro" else "Editar Logro",
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
+        Text(
+            text = if (logro == null) "Registrar Logro" else "Editar Logro",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = jugadorId,
-                    onValueChange = { jugadorId = it },
-                    label = { Text("ID del jugador") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = descripcion,
-                    onValueChange = { descripcion = it },
-                    label = { Text("Descripción del logro") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                OutlinedTextField(
-                    value = partidaId,
-                    onValueChange = { partidaId = it },
-                    label = { Text("ID de la partida (opcional)") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                errorMessage?.let {
-                    Text(
-                        text = it,
-                        color = Color.Red,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Button(
-                        onClick = onCancel,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                    ) {
-                        Text("Cancelar")
-                    }
-
-                    Button(
+        Box {
+            OutlinedTextField(
+                value = jugadorSeleccionado,
+                onValueChange = { jugadorSeleccionado = it },
+                label = { Text("Jugador") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showDropdown = true },
+                readOnly = true
+            )
+            DropdownMenu(
+                expanded = showDropdown,
+                onDismissRequest = { showDropdown = false }
+            ) {
+                jugadores.forEach { jugador ->
+                    DropdownMenuItem(
+                        text = { Text(jugador.nombres) },
                         onClick = {
-                            val jugadorIdInt = jugadorId.toIntOrNull()
-                            val partidaIdInt = partidaId.toIntOrNull()
-                            if (jugadorIdInt == null || jugadorIdInt <= 0) {
-                                errorMessage = "Debe ingresar un ID de jugador válido."
-                            } else if (descripcion.isBlank()) {
-                                errorMessage = "Debe ingresar una descripción."
-                            } else {
-                                errorMessage = null
-                                agregarLogro(jugadorIdInt, descripcion, partidaIdInt)
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-                    ) {
-                        if (logro == null) {
-                            Icon(Icons.Default.CheckCircle, contentDescription = "Guardar")
-                            Spacer(Modifier.width(8.dp))
-                            Text("Guardar")
-                        } else {
-                            Icon(Icons.Default.Edit, contentDescription = "Actualizar")
-                            Spacer(Modifier.width(8.dp))
-                            Text("Actualizar")
+                            jugadorSeleccionado = jugador.nombres
+                            showDropdown = false
                         }
-                    }
+                    )
                 }
             }
         }
+
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = descripcion,
+            onValueChange = { descripcion = it },
+            label = { Text("Descripción") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = partidaId,
+            onValueChange = { partidaId = it },
+            label = { Text("ID de la partida (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = fecha,
+            onValueChange = { },
+            label = { Text("Fecha") },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AccountBox,
+                    contentDescription = "Seleccionar fecha",
+                    modifier = Modifier.clickable { showDatePicker = true }
+                )
+            },
+            readOnly = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+
+        if (showDatePicker) {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                onDateSelected = { selectedDate ->
+                    fecha = dateFormat.format(selectedDate)
+                    showDatePicker = false
+                },
+                onDismissRequest = { showDatePicker = false },
+                initialDate = logro?.fecha ?: calendar.time
+            )
+        }
+
+        errorMessage?.let {
+            Text(it, color = Color.Red)
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = onCancel,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text("Cancelar")
+            }
+
+            Button(
+                onClick = {
+                    val jugador = jugadores.find { it.nombres == jugadorSeleccionado }
+                    val partidaIdInt = partidaId.toIntOrNull()
+                    val fechaDate = try { dateFormat.parse(fecha) } catch (e: Exception) { null }
+
+                    when {
+                        jugador == null -> errorMessage = "Debe seleccionar un jugador"
+                        descripcion.isBlank() -> errorMessage = "Debe ingresar una descripción"
+                        fechaDate == null -> errorMessage = "Debe seleccionar una fecha"
+                        else -> {
+                            errorMessage = null
+                            agregarLogro(jugador.jugadorId!!, descripcion, partidaIdInt, fechaDate)
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+            ) {
+                Text(if (logro == null) "Guardar" else "Actualizar")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialog(
+    onDateSelected: (Date) -> Unit,
+    onDismissRequest: () -> Unit,
+    initialDate: Date
+) {
+    val calendar = Calendar.getInstance().apply { time = initialDate }
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    androidx.compose.material3.DatePickerDialog(
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            TextButton(onClick = {
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(year, month, day)
+                onDateSelected(selectedCalendar.time)
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancelar")
+            }
+        }
+    ) {
+        DatePicker(
+            state = rememberDatePickerState(initialSelectedDateMillis = initialDate.time)
+        )
     }
 }
