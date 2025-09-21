@@ -11,7 +11,10 @@ sealed class Screen {
 
     @Serializable
     data class Partida(val partidaId: Int?) : Screen()
-
+    @Serializable
+    data object LogroList : Screen()
+    @Serializable
+    data class Logro(val logroId: Int?) : Screen()
     @Serializable
     data object Dashboard:Screen()
 }
