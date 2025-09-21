@@ -40,16 +40,17 @@ class LogroViewModel @Inject constructor(
         }
     }
 
-    fun agregar(jugadorId: Int, descripcion: String, partidaId: Int? = null) {
+    fun agregar(jugadorId: Int, descripcion: String, partidaId: Int? = null, fecha: Date) {
         val logro = LogroEntity(
             logroId = null,
-            fecha = Date(),
+            fecha = fecha,
             jugadorId = jugadorId,
             partidaId = partidaId,
             descripcion = descripcion
         )
         saveLogro(logro)
     }
+
 
     fun delete(logro: LogroEntity) {
         viewModelScope.launch {
