@@ -18,11 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.registrojugadores.data.local.entity.JugadorEntity
 import com.example.registrojugadores.data.local.entity.LogroEntity
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun LogroListScreen(
     logroList: List<LogroEntity>,
+    jugadores: List<JugadorEntity>, // ← agregamos la lista de jugadores
     onCreate: () -> Unit,
     onDelete: (LogroEntity) -> Unit,
     onEdit: (LogroEntity) -> Unit
@@ -62,7 +66,7 @@ fun LogroListScreen(
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(logroList) { logro ->
-                    LogroRow(logro, onDelete, onEdit)
+                    LogroRow(logro, jugadores, onDelete, onEdit)
                 }
             }
         }
@@ -72,9 +76,13 @@ fun LogroListScreen(
 @Composable
 fun LogroRow(
     logro: LogroEntity,
+    jugadores: List<JugadorEntity>, // ← agregamos la lista de jugadores
     onDelete: (LogroEntity) -> Unit,
     onEdit: (LogroEntity) -> Unit
 ) {
+    // Buscar el nombre del jugador por su ID
+    val jugadorNombre = jugadores.find { it.jugadorId == logro.jugadorId }?.nombres ?: "Desconocido"
+
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier.fillMaxWidth(),
@@ -89,8 +97,8 @@ fun LogroRow(
         ) {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Jugador ID: ", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Text("${logro.jugadorId}", fontSize = 16.sp)
+                    Text("Jugador: ", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(jugadorNombre, fontSize = 16.sp)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Descripción: ", fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -99,6 +107,10 @@ fun LogroRow(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Partida ID: ", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Text("${logro.partidaId ?: "N/A"}", fontSize = 16.sp)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Fecha: ", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(logro.fecha?.let { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) } ?: "N/A", fontSize = 16.sp)
                 }
             }
 
