@@ -10,6 +10,9 @@ import com.example.registrojugadores.presentation.DashboardScreen
 import com.example.registrojugadores.presentation.jugador.JugadorListScreen
 import com.example.registrojugadores.presentation.jugador.JugadorScreen
 import com.example.registrojugadores.presentation.jugador.JugadorViewModel
+import com.example.registrojugadores.presentation.logro.LogroListScreen
+import com.example.registrojugadores.presentation.logro.LogroScreen
+import com.example.registrojugadores.presentation.logro.LogroViewModel
 import com.example.registrojugadores.presentation.partida.EditPartidaScreen
 import com.example.registrojugadores.presentation.partida.PartidaListScreen
 import com.example.registrojugadores.presentation.partida.PartidaScreen
@@ -19,6 +22,7 @@ import com.example.registrojugadores.presentation.partida.PartidaViewModel
 fun JugadoresNavHost(
     navHostController: NavHostController,
     jugadorViewModel: JugadorViewModel,
+    logroViewModel: LogroViewModel,
     partidaViewModel: PartidaViewModel
 ) {
     NavHost(
@@ -115,5 +119,29 @@ fun JugadoresNavHost(
                 onCancel = { navHostController.popBackStack() }
             )
         }
+// Logros
+        composable("logroList") {
+            val logroList = logroViewModel.logroList.collectAsState().value
+            LogroListScreen(
+                logroList = logroList,
+                onEdit = { logro -> navHostController.navigate("logro/${logro.logroId ?: -1}") },
+                onCreate = { navHostController.navigate("logro/-1") },
+                onDelete = { logro -> logroViewModel.delete(logro) }
+            )
+        }
+        composable("logro/{logroId}") { backStackEntry ->
+            val logroId = backStackEntry.arguments?.getString("logroId")?.toIntOrNull()
+            val logro = if (logroId != null && logroId != -1) logroViewModel.getLogroById(logroId) else null
+            LogroScreen(
+                logro = logro,
+                agregarLogro = { jugadorId, descripcion, partidaId ->
+                    if (logro == null) logroViewModel.agregar(jugadorId, descripcion, partidaId)
+                    else logroViewModel.saveLogro(logro.copy(jugadorId = jugadorId, descripcion = descripcion, partidaId = partidaId))
+                    navHostController.popBackStack()
+                },
+                onCancel = { navHostController.popBackStack() }
+            )
+        }
+
     }
-    }
+}
