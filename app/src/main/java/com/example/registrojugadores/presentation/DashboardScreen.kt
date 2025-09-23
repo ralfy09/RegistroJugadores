@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -118,6 +119,23 @@ fun DashboardScreen(navController: NavController) {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón Logros
+                Button(
+                    onClick = { navController.navigate("logroList") },
+                    modifier = Modifier.fillMaxWidth().height(55.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF009688),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Icon(Icons.Default.Face, contentDescription = "Logros", modifier = Modifier.size(24.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Logros", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
