@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -127,7 +128,7 @@ fun LogroScreen(
             label = { Text("Fecha") },
             trailingIcon = {
                 Icon(
-                    imageVector = Icons.Default.AccountBox,
+                    imageVector = Icons.Default.DateRange,
                     contentDescription = "Seleccionar fecha",
                     modifier = Modifier.clickable { showDatePicker = true }
                 )
